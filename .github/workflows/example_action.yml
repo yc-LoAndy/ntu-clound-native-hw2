@@ -25,21 +25,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Check extracted branch name
+        run: echo "Branch name is ${{ steps.extract_branch.outputs.branch }}"
+      
+      - name: Fail on hw1-f branch only
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-      - name: Fail on hw-f branch only
-        run: |
-          if [ "${{ github.ref_name }}" = "hw1-f" ]; then
-            echo "This is branch hw1-f"
+          if [ ${{ steps.extract_branch.outputs.branch }} = "hw1-f" ]; then
             rm nonExistentFile.txt
-          else
-            echo "This is branch hw1-p"
           fi
