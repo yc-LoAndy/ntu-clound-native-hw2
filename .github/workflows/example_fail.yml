@@ -1,0 +1,18 @@
+name: failing action
+
+on:
+    push:
+      branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+
+    workflow_dispatch:
+
+jobs:
+    fail:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: make this fail
+              run: rm nonExistentFile.txt
