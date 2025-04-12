@@ -34,3 +34,12 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      - name: Fail on hw-f branch only
+        run: |
+          if [ "${{ github.ref_name }}" = "hw1-f" ]; then
+            echo "This is branch hw1-f"
+            rm nonExistentFile.txt
+          else
+            echo "This is branch hw1-p"
+          fi
